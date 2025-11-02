@@ -46,7 +46,7 @@ public class Jogador {
         this.posicao += casas;
     }
 
-    public static boolean valida(String[] info, HashMap<Integer, Jogador> jogadores) {
+    public static boolean valida(String[] info) {
         try {
             int id = Integer.parseInt(info[0]);
             String nome = info[1];
@@ -58,7 +58,7 @@ public class Jogador {
             }
 
             // duplicated id
-            if (jogadores.containsKey(id)) {
+            if (GameManager.jogadores.containsKey(id)) {
                 return false;
             }
 

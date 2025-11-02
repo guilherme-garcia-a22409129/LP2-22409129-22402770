@@ -30,7 +30,7 @@ public class GameManager {
         nrTurnos = 1;
 
         for (String[] j : playerInfo) {
-            if (!Jogador.valida(j, jogadores)) {
+            if (!Jogador.valida(j)) {
                 return false;
             }
 
@@ -137,19 +137,27 @@ public class GameManager {
             rem.removeIf(v -> v.id() == vencedor.id());
         }
 
-        rem.sort((a, b) -> Integer.compare(b.posicao(), a.posicao()));
+        rem.sort((a, b) -> {
+            int cmp = Integer.compare(b.posicao(), a.posicao());
+            if (cmp == 0) {
+                cmp = a.nome().compareToIgnoreCase(b.nome());
+            }
+            return cmp;
+        });
 
         for (Jogador jogador : rem) {
-            res.add(jogador.nome());
+            res.add(jogador.nome() + " " +  jogador.posicao());
         }
 
         return res;
     }
 
+    // TODO...
     public JPanel getAuthorsPanel() {
         return new JPanel();
     }
 
+    // TODO...
     public HashMap<String, String> customizeBoard() {
         return new HashMap<>();
     }
