@@ -1,4 +1,5 @@
 ![](diagrama.png?raw=true "Diagrama UML")
-Progeto feito no ambito da disciplina de Linguagens de programação 2 pelos elementos:
+
+Projeto feito no âmbito da disciplina de 'Linguagens de Programação 2' por:
 -Rodrigo Caetano Filipe (a22402770)
--Guilherme Saraiva Garcia
+-Guilherme M. Saraiva Garcia (a22409129)

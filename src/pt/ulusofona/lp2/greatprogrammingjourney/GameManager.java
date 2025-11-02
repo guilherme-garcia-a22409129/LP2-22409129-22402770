@@ -3,6 +3,7 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static java.lang.Integer.parseInt;
 
@@ -24,6 +25,10 @@ public class GameManager {
         }
 
         jogadores = new HashMap<>();
+        tabuleiro = new Tabuleiro(worldSize);
+        vencedor = null;
+        nrTurnos = 1;
+
         for (String[] j : playerInfo) {
             if (!Jogador.valida(j, jogadores)) {
                 return false;
@@ -32,10 +37,6 @@ public class GameManager {
             Jogador jogador = new Jogador(j);
             jogadores.put(jogador.id(), jogador);
         }
-
-        tabuleiro = new Tabuleiro(worldSize);
-        vencedor = null;
-        nrTurnos = 1;
 
         return true;
     }
@@ -66,16 +67,16 @@ public class GameManager {
         }
 
         String[] res = new String[]{""};
+        List<String> ids = new ArrayList<>();
 
-        for (Jogador jogador : jogadores.values()) {
-            if (jogador.posicao() == slot) {
-                res[0] += jogador.id() + ",";
+        // grab ids...
+        for (Integer id : jogadores.keySet()) {
+            if (jogadores.get(id).posicao() == slot) {
+                ids.add(String.valueOf(id));
             }
         }
 
-        if (!res[0].isEmpty()) {
-            res[0] = res[0].substring(0, res[0].length()-2);
-        }
+        res[0] = String.join(",", ids);
 
         return res;
     }

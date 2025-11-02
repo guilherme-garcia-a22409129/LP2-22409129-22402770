@@ -13,11 +13,13 @@ public class Tabuleiro {
 
     public String slotImage(int slot) {
         if (slot == 1) {
-            return "start.png";
-        } else if (slot == this.tamanho-1) {
-            return "finish.png";
-        } else if (slot > 0 && slot < this.tamanho-1) {
-            return "normal.png";
+            return null;
+            //return "start.png";
+        } else if (slot == this.tamanho) {
+            return "glory.png";
+        } else if (slot > 0 && slot < this.tamanho) {
+            return null;
+            //return "normal.png";
         } else {
             return null;
         }
