@@ -10,23 +10,15 @@ public class Jogador {
 
     private final int id;
     private final String nome;
-    private final String linguagens;
+    private final List<String> linguagens;
     private String cor;
     private int posicao;
     private boolean derrotado;
 
-    public Jogador( int id, String nome, String linguagensFavoritas) {
-        this.id = id;
-        this.nome = nome;
-        this.linguagens = linguagensFavoritas;
-        //this.cor = CORES [id - 1];
-        this.posicao = 1; // Posição inicial
-    }
-
     public Jogador(String[] info) {
         this.id = Integer.parseInt(info[0]);
         this.nome = info[1];
-        this.linguagens = info[2];
+        this.linguagens = Arrays.asList(info[2].split(";"));
         this.cor = info[3];
         this.posicao = 1;
         this.derrotado = false;
@@ -38,11 +30,8 @@ public class Jogador {
 
     public String nome() { return nome; }
 
-    public String linguagens() {
-        String[] linguagens = this.linguagens.split(";");
-        Arrays.sort(linguagens);
-
-        return String.join(";", linguagens);
+    public List<String> linguagens() {
+        return this.linguagens;
     }
 
     public String cor() {
@@ -91,10 +80,12 @@ public class Jogador {
 
     @Override
     public String toString() {
-        return this.id + " | " + this.nome + " | " + this.posicao + " | " + this.linguagens + " | " + (this.derrotado ? "Derrotado" : "Em Jogo");
+        String[] arr = this.linguagens.toArray(new String[0]);
+        Arrays.sort(arr);
+        return this.id + " | " + this.nome + " | " + this.posicao + " | " + String.join(";", arr) + " | " + (this.derrotado ? "Derrotado" : "Em Jogo");
     }
 
     public String[] toArray() {
-        return new String[] {String.valueOf(this.id), this.nome, this.linguagens, this.cor, String.valueOf(this.posicao)};
+        return new String[] {String.valueOf(this.id), this.nome, String.join("; ", this.linguagens), this.cor, String.valueOf(this.posicao)};
     }
 }
