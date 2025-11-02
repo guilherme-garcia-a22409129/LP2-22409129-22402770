@@ -161,14 +161,4 @@ public class GameManager {
     public HashMap<String, String> customizeBoard() {
         return new HashMap<>();
     }
-
-    // ??
-    public Jogador getJogador(int id) {
-        return jogadores.get(id);
-    }
-
-    // ??
-    public Jogador getJogadorAtual() {
-        return jogadores.get(getCurrentPlayerID());
-    }
 }
