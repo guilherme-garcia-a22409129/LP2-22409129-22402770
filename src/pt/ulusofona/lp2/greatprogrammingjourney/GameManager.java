@@ -84,7 +84,9 @@ public class GameManager {
         ArrayList<Integer> ids = new ArrayList<>(jogadores.keySet());
         ids.sort(Integer::compareTo);
 
-        return (nrTurnos-1) % ids.size();
+        int index = (nrTurnos-1) % ids.size();
+
+        return ids.get(index);
     }
 
     public boolean moveCurrentPlayer(int spaces){
