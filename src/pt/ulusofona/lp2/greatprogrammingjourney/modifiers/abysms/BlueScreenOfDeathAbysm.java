@@ -11,13 +11,23 @@ public class BlueScreenOfDeathAbysm extends AbstractAbysm {
     }
 
     @Override
+    public AbysmType type() {
+        return AbysmType.BLUE_SCREEN_OF_DEATH;
+    }
+
+    @Override
+    public String code() {
+        return "A:7";
+    }
+
+    @Override
     public String name() {
         return "Blue Screen of Death";
     }
 
     @Override
-    public AbysmType type() {
-        return AbysmType.BLUE_SCREEN_OF_DEATH;
+    public String message() {
+        return "Perdeu o jogo";
     }
 
     @Override

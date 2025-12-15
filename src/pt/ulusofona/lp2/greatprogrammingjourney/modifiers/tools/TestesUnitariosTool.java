@@ -5,8 +5,14 @@ public class TestesUnitariosTool extends AbstractTool {
         super();
     }
 
-    @Override ToolType type() {
+    @Override
+    public ToolType type() {
         return ToolType.TESTES_UNITARIOS;
+    }
+
+    @Override
+    public String code() {
+        return "T:2";
     }
 
     @Override

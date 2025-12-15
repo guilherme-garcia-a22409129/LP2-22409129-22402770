@@ -5,8 +5,14 @@ public class IDETool extends AbstractTool {
         super();
     }
 
-    @Override ToolType type() {
+    @Override
+    public ToolType type() {
         return ToolType.IDE;
+    }
+
+    @Override
+    public String code() {
+        return "T:4";
     }
 
     @Override

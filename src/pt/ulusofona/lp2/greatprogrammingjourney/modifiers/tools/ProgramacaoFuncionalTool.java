@@ -5,8 +5,14 @@ public class ProgramacaoFuncionalTool extends AbstractTool {
         super();
     }
 
-    @Override ToolType type() {
+    @Override
+    public ToolType type() {
         return ToolType.PROGRAMACAO_FUNCIONAL;
+    }
+
+    @Override
+    public String code() {
+        return "T:1";
     }
 
     @Override

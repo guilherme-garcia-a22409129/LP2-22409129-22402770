@@ -5,8 +5,14 @@ public class TratamentoExcepcoesTool extends AbstractTool {
         super();
     }
 
-    @Override ToolType type() {
+    @Override
+    public ToolType type() {
         return ToolType.TRATAMENTOS_DE_EXCECOES;
+    }
+
+    @Override
+    public String code() {
+        return "T:3";
     }
 
     @Override

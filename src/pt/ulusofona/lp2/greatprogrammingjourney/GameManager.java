@@ -121,7 +121,7 @@ public class GameManager {
             return null;
         }
 
-        String[] res = new String[]{""};
+        String[] res = new String[]{"", "", ""};
         List<String> ids = new ArrayList<>();
 
         // grab ids...
@@ -132,6 +132,17 @@ public class GameManager {
         }
 
         res[0] = String.join(",", ids);
+        res[1] = "";
+        res[2] = "";
+
+        // slot has modifier...
+        Modifier mod = board.getSlot(slot).getModifier();
+        if (mod == null) {
+            return res;
+        }
+
+        res[1] = mod.name();
+        res[2] = mod.code();
 
         return res;
     }
@@ -180,10 +191,7 @@ public class GameManager {
         }
 
         Modifier mod = slot.getModifier();
-
-
-
-        return null;
+        return player.handleModifier(mod);
     }
 
     public boolean gameIsOver(){

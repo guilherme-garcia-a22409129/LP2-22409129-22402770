@@ -34,7 +34,7 @@ public class Board {
     }
 
     public Slot getSlot(int idx) {
-        return this.slots.get(idx);
+        return this.slots.get(idx-1);
     }
 
     public void addModifier(Modifier mod, int pos) {

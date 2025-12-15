@@ -5,6 +5,7 @@ import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.*;
 
 public interface Modifier {
     ModifierGroup group();
+    String code();
     String name();
 
     static Modifier validate(String[] info, int worldSize) {

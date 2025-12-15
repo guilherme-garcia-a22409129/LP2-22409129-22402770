@@ -5,8 +5,14 @@ public class AjudaProfessorTool extends AbstractTool {
         super();
     }
 
-    @Override ToolType type() {
+    @Override
+    public ToolType type() {
         return ToolType.AJUDA_DO_PROFESSOR;
+    }
+
+    @Override
+    public String code() {
+        return "T:5";
     }
 
     @Override
