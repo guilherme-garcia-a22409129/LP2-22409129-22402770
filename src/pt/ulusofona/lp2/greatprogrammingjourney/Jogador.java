@@ -1,5 +1,8 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.Modifier;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.ModifierType;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -14,6 +17,7 @@ public class Jogador {
     private String cor;
     private int posicao;
     private boolean derrotado;
+    private ArrayList<Modifier> modifiers;
 
     public Jogador(String[] info) {
         this.id = Integer.parseInt(info[0]);
@@ -22,6 +26,7 @@ public class Jogador {
         this.cor = info[3];
         this.posicao = 1;
         this.derrotado = false;
+        this.modifiers = new ArrayList<>();
     }
 
     public int id() {
@@ -40,6 +45,10 @@ public class Jogador {
 
     public int posicao() {
         return posicao;
+    }
+
+    public boolean derrotado() {
+        return this.derrotado;
     }
 
     public void avanca(int casas) {
@@ -83,6 +92,19 @@ public class Jogador {
         String[] arr = this.linguagens.toArray(new String[0]);
         Arrays.sort(arr);
         return this.id + " | " + this.nome + " | " + this.posicao + " | " + String.join("; ", arr) + " | " + (this.derrotado ? "Derrotado" : "Em Jogo");
+    }
+
+    public String toStringTools() {
+        if (this.modifiers.isEmpty()) {
+            return this.nome + " : No tools";
+        }
+
+        String[] tools = this.modifiers.stream()
+                .filter(m -> m.type() == ModifierType.TOOL)
+                .map(Modifier::name)
+                .toArray(String[]::new);
+
+        return this.nome + " : " + String.join("; ", tools);
     }
 
     public String[] toArray() {

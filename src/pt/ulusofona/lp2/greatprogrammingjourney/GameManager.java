@@ -1,13 +1,14 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
+import pt.ulusofona.lp2.greatprogrammingjourney.board.Tabuleiro;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.Modifier;
+
 import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
-import static java.lang.Integer.parseInt;
 
 public class GameManager {
     static HashMap <Integer, Jogador> jogadores; // initialize map inside createInitialBoard to avoid persistent data during tests
@@ -44,6 +45,39 @@ public class GameManager {
     }
 
     public boolean createInitialBoard(String[][] playerInfo, int worldSize, String[][] abyssesAndTools) {
+        if (playerInfo.length < 2 || playerInfo.length > 4) {
+            return false;
+        }
+
+        if (worldSize < playerInfo.length*2) {
+            return false;
+        }
+
+        jogadores = new HashMap<>();
+        tabuleiro = new Tabuleiro(worldSize);
+        vencedor = null;
+        nrTurnos = 1;
+
+        // validar jogadores
+        for (String[] j : playerInfo) {
+            if (!Jogador.valida(j)) {
+                return false;
+            }
+
+            Jogador jogador = new Jogador(j);
+            jogadores.put(jogador.id(), jogador);
+        }
+
+        // validar modifiers
+        for (String[] m : abyssesAndTools) {
+            Modifier mod = Modifier.valida(m, worldSize);
+            if (mod == null) {
+                return false;
+            }
+
+            tabuleiro.addModifier(mod, Integer.parseInt(m[2])-1);
+        }
+
         return true;
     }
 
@@ -68,7 +102,12 @@ public class GameManager {
     }
 
     public String getProgrammersInfo() {
-        return "";
+        String[] infos = jogadores.values().stream()
+                .filter(jogador -> !jogador.derrotado())
+                .map(Jogador::toStringTools)
+                .toArray(String[]::new);
+
+        return String.join(";", infos);
     }
 
     public String[] getSlotInfo(int slot){
@@ -113,7 +152,6 @@ public class GameManager {
         }
 
         jogador.avanca(spaces);
-        nrTurnos++;
 
         // set winner
         if (jogador.posicao() == tabuleiro.tamanho()) {
@@ -126,6 +164,8 @@ public class GameManager {
     }
 
     public String reactToAbyssOrTool() {
+
+        nrTurnos++;
         return "";
     }
 
