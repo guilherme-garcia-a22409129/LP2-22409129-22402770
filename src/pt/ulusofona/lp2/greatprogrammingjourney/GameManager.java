@@ -1,7 +1,12 @@
 package pt.ulusofona.lp2.greatprogrammingjourney;
 
-import pt.ulusofona.lp2.greatprogrammingjourney.board.Tabuleiro;
+import pt.ulusofona.lp2.greatprogrammingjourney.board.Board;
+import pt.ulusofona.lp2.greatprogrammingjourney.board.Slot;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.Modifier;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.ModifierGroup;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.AbstractAbysm;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.AbstractTool;
+import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
 
 import javax.swing.*;
 import java.io.File;
@@ -9,12 +14,13 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.spi.AbstractResourceBundleProvider;
 
 public class GameManager {
-    static HashMap <Integer, Jogador> jogadores; // initialize map inside createInitialBoard to avoid persistent data during tests
-    static Jogador vencedor;
-    static Tabuleiro tabuleiro;
-    static int nrTurnos = 0;
+    private HashMap <Integer, Player> players; // initialize map inside createInitialBoard to avoid persistent data during tests
+    private Player winner;
+    private Board board;
+    private int turns = 0;
 
     public GameManager() {}
 
@@ -27,18 +33,18 @@ public class GameManager {
             return false;
         }
 
-        jogadores = new HashMap<>();
-        tabuleiro = new Tabuleiro(worldSize);
-        vencedor = null;
-        nrTurnos = 1;
+        players = new HashMap<>();
+        board = new Board(worldSize);
+        winner = null;
+        turns = 1;
 
         for (String[] j : playerInfo) {
-            if (!Jogador.valida(j)) {
+            if (!Player.validate(j, players)) {
                 return false;
             }
 
-            Jogador jogador = new Jogador(j);
-            jogadores.put(jogador.id(), jogador);
+            Player jogador = new Player(j);
+            players.put(jogador.id(), jogador);
         }
 
         return true;
@@ -53,40 +59,40 @@ public class GameManager {
             return false;
         }
 
-        jogadores = new HashMap<>();
-        tabuleiro = new Tabuleiro(worldSize);
-        vencedor = null;
-        nrTurnos = 1;
+        players = new HashMap<>();
+        board = new Board(worldSize);
+        winner = null;
+        turns = 1;
 
         // validar jogadores
         for (String[] j : playerInfo) {
-            if (!Jogador.valida(j)) {
+            if (!Player.validate(j, players)) {
                 return false;
             }
 
-            Jogador jogador = new Jogador(j);
-            jogadores.put(jogador.id(), jogador);
+            Player jogador = new Player(j);
+            players.put(jogador.id(), jogador);
         }
 
         // validar modifiers
         for (String[] m : abyssesAndTools) {
-            Modifier mod = Modifier.valida(m, worldSize);
+            Modifier mod = Modifier.validate(m, worldSize);
             if (mod == null) {
                 return false;
             }
 
-            tabuleiro.addModifier(mod, Integer.parseInt(m[2])-1);
+            board.addModifier(mod, Integer.parseInt(m[2])-1);
         }
 
         return true;
     }
 
     public String getImagePng(int nrSquare) {
-        return tabuleiro.slotImage(nrSquare);
+        return board.slotImage(nrSquare);
     }
 
     public String[] getProgrammerInfo(int id){
-        Jogador jogador = jogadores.get(id);
+        Player jogador = players.get(id);
         if (jogador != null) {
             return jogador.toArray();
         }
@@ -94,7 +100,7 @@ public class GameManager {
     }
 
     public String getProgrammerInfoAsStr(int id){
-        Jogador jogador = jogadores.get(id);
+        Player jogador = players.get(id);
         if (jogador != null) {
             return jogador.toString();
         }
@@ -102,16 +108,16 @@ public class GameManager {
     }
 
     public String getProgrammersInfo() {
-        String[] infos = jogadores.values().stream()
-                .filter(jogador -> !jogador.derrotado())
-                .map(Jogador::toStringTools)
+        String[] infos = players.values().stream()
+                .filter(jogador -> !jogador.defeated())
+                .map(Player::toStringTools)
                 .toArray(String[]::new);
 
         return String.join(";", infos);
     }
 
     public String[] getSlotInfo(int slot){
-        if (slot < 1 || slot > tabuleiro.tamanho()) {
+        if (slot < 1 || slot > board.size()) {
             return null;
         }
 
@@ -119,8 +125,8 @@ public class GameManager {
         List<String> ids = new ArrayList<>();
 
         // grab ids...
-        for (Integer id : jogadores.keySet()) {
-            if (jogadores.get(id).posicao() == slot) {
+        for (Integer id : players.keySet()) {
+            if (players.get(id).position() == slot) {
                 ids.add(String.valueOf(id));
             }
         }
@@ -131,10 +137,10 @@ public class GameManager {
     }
 
     public int getCurrentPlayerID(){
-        ArrayList<Integer> ids = new ArrayList<>(jogadores.keySet());
+        ArrayList<Integer> ids = new ArrayList<>(players.keySet());
         ids.sort(Integer::compareTo);
 
-        int index = (nrTurnos-1) % ids.size();
+        int index = (turns -1) % ids.size();
 
         return ids.get(index);
     }
@@ -144,19 +150,19 @@ public class GameManager {
             return false;
         }
 
-        Jogador jogador = jogadores.get(getCurrentPlayerID());
-        int pos = jogador.posicao();
+        Player jogador = players.get(getCurrentPlayerID());
+        int pos = jogador.position();
 
-        if (pos + spaces > tabuleiro.tamanho()) {
-            spaces = tabuleiro.tamanho() - pos;
+        if (pos + spaces > board.size()) {
+            spaces = board.size() - pos;
         }
 
-        jogador.avanca(spaces);
+        jogador.move(spaces);
 
         // set winner
-        if (jogador.posicao() == tabuleiro.tamanho()) {
-            if (vencedor == null) {
-                vencedor = jogador;
+        if (jogador.position() == board.size()) {
+            if (winner == null) {
+                winner = jogador;
             }
         }
 
@@ -164,13 +170,47 @@ public class GameManager {
     }
 
     public String reactToAbyssOrTool() {
+        Player player = players.get(getCurrentPlayerID());
+        Slot slot = board.getSlot(player.position());
 
-        nrTurnos++;
-        return "";
+        turns++;
+
+        if (!slot.hasModifier()) {
+            return null;
+        }
+
+        Modifier mod = slot.getModifier();
+
+        switch (mod.group()) {
+            case ModifierGroup.ABYSM -> {
+                AbstractAbysm abysm = (AbstractAbysm) mod;
+                AbstractTool tool = abysm.counter(player.tools());
+
+                if (tool != null) {
+                    player.removeTool(tool);
+                    return mod.name() + " anulado por " + tool.name();
+                }
+
+                // trapp player
+
+                break;
+            }
+            case ModifierGroup.TOOL -> {
+                AbstractTool tool = (AbstractTool) mod;
+                if (player.hasTool(tool.type())) {
+                    return null;
+                }
+
+                player.addTool(tool);
+                return "Recolheu ferramenta: " + mod.name();
+            }
+        }
+
+        return null;
     }
 
     public boolean gameIsOver(){
-        return !getSlotInfo(tabuleiro.tamanho())[0].isEmpty();
+        return !getSlotInfo(board.size())[0].isEmpty();
     }
 
     public ArrayList<String> getGameResults(){
@@ -179,28 +219,28 @@ public class GameManager {
         res.add("THE GREAT PROGRAMMING JOURNEY");
         res.add("");
         res.add("NR. DE TURNOS");
-        res.add(String.valueOf(nrTurnos));
+        res.add(String.valueOf(turns));
         res.add("");
         res.add("VENCEDOR");
-        res.add(((vencedor != null) ? vencedor.nome() : ""));
+        res.add(((winner != null) ? winner.name() : ""));
         res.add("");
         res.add("RESTANTES");
 
-        List<Jogador> rem = new ArrayList<>(jogadores.values());
-        if (vencedor != null) {
-            rem.removeIf(v -> v.id() == vencedor.id());
+        List<Player> rem = new ArrayList<>(players.values());
+        if (winner != null) {
+            rem.removeIf(v -> v.id() == winner.id());
         }
 
         rem.sort((a, b) -> {
-            int cmp = Integer.compare(b.posicao(), a.posicao());
+            int cmp = Integer.compare(b.position(), a.position());
             if (cmp == 0) {
-                cmp = a.nome().compareToIgnoreCase(b.nome());
+                cmp = a.name().compareToIgnoreCase(b.name());
             }
             return cmp;
         });
 
-        for (Jogador jogador : rem) {
-            res.add(jogador.nome() + " " +  jogador.posicao());
+        for (Player jogador : rem) {
+            res.add(jogador.name() + " " +  jogador.position());
         }
 
         return res;

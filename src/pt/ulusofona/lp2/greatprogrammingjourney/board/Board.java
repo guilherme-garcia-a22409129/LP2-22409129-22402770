@@ -4,18 +4,18 @@ import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.Modifier;
 
 import java.util.ArrayList;
 
-public class Tabuleiro {
-    private ArrayList<Slot> slots;
+public class Board {
+    private final ArrayList<Slot> slots;
 
-    public Tabuleiro(int tamanho) {
-        this.slots = new ArrayList<>(tamanho);
+    public Board(int size) {
+        this.slots = new ArrayList<>(size);
 
-        for (int i = 0; i < tamanho; i++) {
+        for (int i = 0; i < size; i++) {
             slots.add(new Slot(i));
         }
     }
 
-    public int tamanho() {
+    public int size() {
         return this.slots.size();
     }
 
@@ -31,6 +31,10 @@ public class Tabuleiro {
         } else {
             return null;
         }
+    }
+
+    public Slot getSlot(int idx) {
+        return this.slots.get(idx);
     }
 
     public void addModifier(Modifier mod, int pos) {

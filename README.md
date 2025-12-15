@@ -7,25 +7,25 @@ Projeto feito no âmbito da disciplina de 'Linguagens de Programação 2' por:
 - Guilherme M. Saraiva Garcia (a22409129)
 
 Herança:
-- Abismo 0 - XX
-- Abismo 1 - YY
+- nada
 
 Programação Funcional:
-- Abismo 0 - XX
-- Abismo 1 - YY
+- Abismo 6 - Efeitos Secundarios
 
 Testes Unitários:
-- Abismo 0 - XX
-- Abismo 1 - YY
+- Abismo 0 - Erro Sintaxe
+- Abismo 1 - Erro Lógica
 
 Tratamento de Excepçoes:
-- Abismo 0 - XX
-- Abismo 1 - YY
+- Abismo 2 - Exception
+- Abismo 3 - FileNotFoundException
+- Abismo 7 - BSOD
 
 IDE:
-- Abismo 0 - XX
-- Abismo 1 - YY
+- Abismo 0 - Erro Sintaxe
+- Abismo 3 - FileNotFoundException
+- Abismo 4 - Crash
+- Abismo 8 - Ciclo Infinito
 
 Ajuda Do Professor:
-- Abismo 0 - XX
-- Abismo 1 - YY
+- nada

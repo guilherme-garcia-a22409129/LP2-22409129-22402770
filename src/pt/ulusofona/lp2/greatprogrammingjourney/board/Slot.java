@@ -3,7 +3,7 @@ package pt.ulusofona.lp2.greatprogrammingjourney.board;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.Modifier;
 
 public class Slot {
-    private int id;
+    private final int id;
     private Modifier modifier;
 
     public Slot(int id) {
@@ -14,7 +14,11 @@ public class Slot {
         return this.id;
     }
 
-    public Modifier modifier() {
+    public boolean hasModifier() {
+        return this.modifier != null;
+    }
+
+    public Modifier getModifier() {
         return this.modifier;
     }
 

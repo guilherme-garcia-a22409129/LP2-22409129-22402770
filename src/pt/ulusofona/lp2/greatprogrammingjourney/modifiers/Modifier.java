@@ -1,13 +1,13 @@
 package pt.ulusofona.lp2.greatprogrammingjourney.modifiers;
 
-import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abismos.*;
-import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.ferramentas.*;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.*;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.*;
 
 public interface Modifier {
-    ModifierType type();
+    ModifierGroup group();
     String name();
 
-    static Modifier valida(String[] info, int worldSize) {
+    static Modifier validate(String[] info, int worldSize) {
         int type, mod, pos;
 
         try {
@@ -25,25 +25,25 @@ public interface Modifier {
 
         return switch (type) {
             case 0 -> switch (mod) {
-                case 0 -> new ErroSintaxeAbismo();
-                case 1 -> new ErroLogicaAbismo();
-                case 2 -> new ExceptionAbismo();
-                case 3 -> new FileNotFoundExceptionAbismo();
-                case 4 -> new CrashAbismo();
-                case 5 -> new CodigoDuplicadoAbismo();
-                case 6 -> new EfeitosSecundariosAbismo();
-                case 7 -> new BlueScreenOfDeathAbismo();
-                case 8 -> new CicloInfinitoAbismo();
-                case 9 -> new SegmentationFaultAbismo();
+                case 0 -> new ErroSintaxeAbysm();
+                case 1 -> new ErroLogicaAbysm();
+                case 2 -> new ExceptionAbysm();
+                case 3 -> new FileNotFoundExceptionAbysm();
+                case 4 -> new CrashAbysm();
+                case 5 -> new CodigoDuplicadoAbysm();
+                case 6 -> new EfeitosSecundariosAbysm();
+                case 7 -> new BlueScreenOfDeathAbysm();
+                case 8 -> new CicloInfinitoAbysm();
+                case 9 -> new SegmentationFaultAbysm();
                 default -> null;
             };
             case 1 -> switch (mod) {
-                case 0 -> new HerancaFerramenta();
-                case 1 -> new ProgramacaoFuncionalFerramenta();
-                case 2 -> new TestesUnitariosFerramenta();
-                case 3 -> new TratamentoExcepcoesFerramenta();
-                case 4 -> new IDEFerramenta();
-                case 5 -> new AjudaProfessorFerramenta();
+                case 0 -> new HerancaTool();
+                case 1 -> new ProgramacaoFuncionalTool();
+                case 2 -> new TestesUnitariosTool();
+                case 3 -> new TratamentoExcepcoesTool();
+                case 4 -> new IDETool();
+                case 5 -> new AjudaProfessorTool();
                 default -> null;
             };
             default -> null;
