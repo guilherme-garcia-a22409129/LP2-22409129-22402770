@@ -207,9 +207,23 @@ public class Player {
 
     @Override
     public String toString() {
-        String[] arr = this.languages.toArray(new String[0]);
-        Arrays.sort(arr);
-        return this.id + " | " + this.name + " | " + this.position + " | " + String.join("; ", arr) + " | " + (this.state == PlayerState.DEFEATED ? "Derrotado" : "Em Jogo");
+        String langs = "No languages";
+        if (!this.languages.isEmpty()) {
+            String[] langsArr = this.languages.toArray(new String[0]);
+            Arrays.sort(langsArr);
+
+            langs = String.join(";", langsArr);
+        }
+
+        String tools = "No tools";
+        if (!this.tools.isEmpty()) {
+            String[] toolsArr = this.tools.values().stream()
+                    .map(AbstractTool::name)
+                    .toArray(String[]::new);
+            tools = String.join(";", toolsArr);
+        }
+
+        return this.id + " | " + this.name + " | " + this.position + " | " + tools + " | " + langs + " | " + (this.state == PlayerState.DEFEATED ? "Derrotado" : "Em Jogo");
     }
 
     public String toStringTools() {
