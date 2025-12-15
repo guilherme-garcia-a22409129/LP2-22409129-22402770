@@ -72,13 +72,16 @@ public class GameManager {
         }
 
         // validar modifiers
-        for (String[] m : abyssesAndTools) {
-            Modifier mod = Modifier.validate(m, worldSize);
-            if (mod == null) {
-                return false;
-            }
+        // FIX: pt.ulusofona.lp2.greatprogrammingjourney.TestTeacherP2.test_027_LanguageBasedMovementRestrictions_OBG
+        if (abyssesAndTools != null) {
+            for (String[] m : abyssesAndTools) {
+                Modifier mod = Modifier.validate(m, worldSize);
+                if (mod == null) {
+                    return false;
+                }
 
-            board.addModifier(mod, Integer.parseInt(m[2])-1);
+                board.addModifier(mod, Integer.parseInt(m[2])-1);
+            }
         }
 
         return true;

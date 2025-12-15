@@ -268,6 +268,29 @@ public class Player {
     }
 
     public String[] toArray() {
-        return new String[] {String.valueOf(this.id), this.name, String.join(";", this.languages), this.color, String.valueOf(this.position)};
+
+        String langs = "No languages";
+        if (!this.languages.isEmpty()) {
+            String[] langsArr = this.languages.toArray(new String[0]);
+            langs = String.join("; ", langsArr);
+        }
+
+        String tools = "No tools";
+        if (!this.tools.isEmpty()) {
+            String[] toolsArr = this.tools.values().stream()
+                    .map(AbstractTool::name)
+                    .toArray(String[]::new);
+            Arrays.sort(toolsArr);
+            tools = String.join(";", toolsArr);
+        }
+
+        return new String[] {
+                String.valueOf(this.id),
+                this.name,
+                langs,
+                this.color,
+                String.valueOf(this.position),
+                tools
+        };
     }
 }
