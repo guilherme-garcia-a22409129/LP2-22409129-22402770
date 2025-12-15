@@ -2,7 +2,6 @@ package pt.ulusofona.lp2.greatprogrammingjourney.modifiers;
 
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.*;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.*;
-import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.TestesUnitariosTool; // this should fix compilation errors, no? :/
 
 public interface Modifier {
     ModifierGroup group();
@@ -42,7 +41,15 @@ public interface Modifier {
             case 1 -> switch (mod) {
                 case 0 -> new HerancaTool();
                 case 1 -> new ProgramacaoFuncionalTool();
-                case 2 -> new TestesUnitariosTool();
+                case 2 -> new AbstractTool() {
+                    // yup!!! imma do it here... idgaf... dp doesn't see the imported file for some reason...
+                    @Override
+                    public ToolType type() { return ToolType.TESTES_UNITARIOS; }
+                    @Override
+                    public String code() { return "T:2"; }
+                    @Override
+                    public String name() { return "Testes Unitários"; }
+                };
                 case 3 -> new TratamentoExcepcoesTool();
                 case 4 -> new IDETool();
                 case 5 -> new AjudaProfessorTool();
