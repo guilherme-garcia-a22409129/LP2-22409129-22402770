@@ -3,9 +3,6 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 import pt.ulusofona.lp2.greatprogrammingjourney.board.Board;
 import pt.ulusofona.lp2.greatprogrammingjourney.board.Slot;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.Modifier;
-import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.ModifierGroup;
-import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.AbstractAbysm;
-import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.AbstractTool;
 import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
 import pt.ulusofona.lp2.greatprogrammingjourney.player.PlayerState;
 
@@ -161,19 +158,23 @@ public class GameManager {
             return false;
         }
 
-        Player jogador = players.get(getCurrentPlayerID());
-        int pos = jogador.position();
+        Player player = players.get(getCurrentPlayerID());
+        int pos = player.position();
+
+        if (player.state() == PlayerState.TRAPPED) {
+            return false;
+        }
 
         if (pos + spaces > board.size()) {
             spaces = board.size() - pos;
         }
 
-        jogador.move(spaces);
+        player.move(spaces);
 
         // set winner
-        if (jogador.position() == board.size()) {
+        if (player.position() == board.size()) {
             if (winner == null) {
-                winner = jogador;
+                winner = player;
             }
         }
 
@@ -186,12 +187,16 @@ public class GameManager {
 
         turns++;
 
+        if (player.state() == PlayerState.TRAPPED) {
+            return null;
+        }
+
         if (!slot.hasModifier()) {
             return null;
         }
 
         Modifier mod = slot.getModifier();
-        return player.handleModifier(mod);
+        return player.handleModifier(mod, board, players);
     }
 
     public boolean gameIsOver(){

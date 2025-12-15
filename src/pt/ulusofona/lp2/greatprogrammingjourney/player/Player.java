@@ -1,6 +1,7 @@
 package pt.ulusofona.lp2.greatprogrammingjourney.player;
 
 import pt.ulusofona.lp2.greatprogrammingjourney.GameManager;
+import pt.ulusofona.lp2.greatprogrammingjourney.board.Board;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.Modifier;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.ModifierGroup;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.AbstractAbysm;
@@ -91,7 +92,7 @@ public class Player {
         this.tools.remove(tool.type());
     }
 
-    public String handleModifier(Modifier mod) {
+    public String handleModifier(Modifier mod, Board board, HashMap<Integer, Player> players) {
         switch (mod.group()) {
             case ABYSM -> {
                 AbstractAbysm abysm = (AbstractAbysm) mod;
@@ -102,7 +103,7 @@ public class Player {
                     return mod.name() + " anulado por " + tool.name();
                 }
 
-                return this.triggerAbyss(abysm);
+                return this.triggerAbyss(abysm, board, players);
             }
             case TOOL -> {
                 AbstractTool tool = (AbstractTool) mod;
@@ -118,7 +119,7 @@ public class Player {
         return null;
     }
 
-    private String triggerAbyss(AbstractAbysm abysm) {
+    private String triggerAbyss(AbstractAbysm abysm, Board board, HashMap<Integer, Player> players) {
         switch (abysm.type()) {
             case ERRO_SINTAXE -> {
                 // update position and log it in history
@@ -164,9 +165,31 @@ public class Player {
             }
             case CICLO_INFINITO -> {
                 // todo
+                this.setState(PlayerState.TRAPPED);
+
+                for (Player player : players.values()) {
+                    if (player.position() == this.position) {
+                        player.setState(PlayerState.PLAYING);
+                    }
+                }
             }
             case SEGMENTATION_FAULT -> {
-                // todo
+                int count = 1;
+                for (Player player : players.values()) {
+                    if (player.position() == this.position) {
+                       count++;
+                    }
+                }
+
+                if (count < 2) {
+                    return null;
+                }
+
+                for (Player player : players.values()) {
+                    if (player.position() == this.position) {
+                        player.setPosition(player.position()-3);
+                    }
+                }
             }
         }
 
