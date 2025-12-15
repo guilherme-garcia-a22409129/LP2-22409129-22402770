@@ -1,6 +1,9 @@
 package pt.ulusofona.lp2.greatprogrammingjourney.player;
 
 import pt.ulusofona.lp2.greatprogrammingjourney.GameManager;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.Modifier;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.ModifierGroup;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.AbstractAbysm;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.AbstractTool;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.ToolType;
 
@@ -25,8 +28,12 @@ public class Player {
         this.languages = Arrays.asList(info[2].split(";"));
         this.color = info[3];
         this.position = 1;
+
         this.state = PlayerState.PLAYING;
+        this.history = new ArrayList<>();
         this.tools = new HashMap<>();
+
+        this.history.add(this.position);
     }
 
     public int id() {
@@ -47,12 +54,33 @@ public class Player {
         return position;
     }
 
-    public boolean hasTool(ToolType type) {
-        return this.tools.containsKey(type);
+    public void setPosition(int slot) {
+        this.position = slot;
+    }
+
+    public void move(int slots) {
+        this.position += slots;
+        this.history.add(this.position);
+    }
+
+    public PlayerState state() {
+        return this.state;
+    }
+
+    public void setState(PlayerState state) {
+        this.state = state;
+    }
+
+    public ArrayList<Integer> history() {
+        return this.history;
     }
 
     public HashMap<ToolType, AbstractTool> tools() {
         return this.tools;
+    }
+
+    public boolean hasTool(ToolType type) {
+        return this.tools.containsKey(type);
     }
 
     public void addTool(AbstractTool tool) {
@@ -63,8 +91,86 @@ public class Player {
         this.tools.remove(tool.type());
     }
 
-    public void move(int slots) {
-        this.position += slots;
+    public String handleModifier(Modifier mod) {
+        switch (mod.group()) {
+            case ModifierGroup.ABYSM -> {
+                AbstractAbysm abysm = (AbstractAbysm) mod;
+                AbstractTool tool = abysm.counter(this.tools());
+
+                if (tool != null) {
+                    this.removeTool(tool);
+                    return mod.name() + " anulado por " + tool.name();
+                }
+
+                return this.triggerAbyss(abysm);
+            }
+            case ModifierGroup.TOOL -> {
+                AbstractTool tool = (AbstractTool) mod;
+                if (this.hasTool(tool.type())) {
+                    return null;
+                }
+
+                this.addTool(tool);
+                return "Recolheu ferramenta: " + mod.name();
+            }
+        }
+
+        return null;
+    }
+
+    private String triggerAbyss(AbstractAbysm abysm) {
+        switch (abysm.type()) {
+            case ERRO_SINTAXE -> {
+                // update position and log it in history
+                this.setPosition(this.position-1);
+                this.history.set(this.history.size()-1, this.position);
+            }
+            case ERRO_LOGICA -> {
+                int cur = this.position;
+                int prev = this.history.get(this.history.size()-2);
+
+                int back = Math.floorDiv((cur - prev), 2);
+
+                this.setPosition(this.position - back);
+                this.history.set(this.history.size()-1, this.position);
+            }
+            case EXCEPTION -> {
+                // update position and log it in history
+                this.setPosition(this.position-2);
+                this.history.set(this.history.size()-1, this.position);
+            }
+            case FILE_NOT_FOUND_EXCEPTION -> {
+                // update position and log it in history
+                this.setPosition(this.position-3);
+                this.history.set(this.history.size()-1, this.position);
+            }
+            case CRASH -> {
+                // update position and log it in history
+                this.setPosition(1);
+                this.history.set(this.history.size()-1, this.position);
+            }
+            case CODIGO_DUPLICADO -> {
+                // update position and log it in history
+                this.setPosition(this.history.get(this.history.size()-2));
+                this.history.set(this.history.size()-1, this.position);
+            }
+            case EFEITOS_SECUNDARIOS -> {
+                // update position and log it in history
+                this.setPosition(this.history.get(this.history.size()-3));
+                this.history.set(this.history.size()-1, this.position);
+            }
+            case BLUE_SCREEN_OF_DEATH -> {
+                this.setState(PlayerState.DEFEATED);
+            }
+            case CICLO_INFINITO -> {
+                // todo
+            }
+            case SEGMENTATION_FAULT -> {
+                // todo
+            }
+        }
+
+        return abysm.message();
     }
 
     public static boolean validate(String[] info, HashMap<Integer, Player> players) {

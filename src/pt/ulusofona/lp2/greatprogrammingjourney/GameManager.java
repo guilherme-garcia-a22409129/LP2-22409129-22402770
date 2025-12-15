@@ -7,6 +7,7 @@ import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.ModifierGroup;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.AbstractAbysm;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.AbstractTool;
 import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
+import pt.ulusofona.lp2.greatprogrammingjourney.player.PlayerState;
 
 import javax.swing.*;
 import java.io.File;
@@ -14,7 +15,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.spi.AbstractResourceBundleProvider;
 
 public class GameManager {
     private HashMap <Integer, Player> players; // initialize map inside createInitialBoard to avoid persistent data during tests
@@ -109,7 +109,7 @@ public class GameManager {
 
     public String getProgrammersInfo() {
         String[] infos = players.values().stream()
-                .filter(jogador -> !jogador.defeated())
+                .filter(p -> p.state() != PlayerState.DEFEATED)
                 .map(Player::toStringTools)
                 .toArray(String[]::new);
 
@@ -181,30 +181,7 @@ public class GameManager {
 
         Modifier mod = slot.getModifier();
 
-        switch (mod.group()) {
-            case ModifierGroup.ABYSM -> {
-                AbstractAbysm abysm = (AbstractAbysm) mod;
-                AbstractTool tool = abysm.counter(player.tools());
 
-                if (tool != null) {
-                    player.removeTool(tool);
-                    return mod.name() + " anulado por " + tool.name();
-                }
-
-                // trapp player
-
-                break;
-            }
-            case ModifierGroup.TOOL -> {
-                AbstractTool tool = (AbstractTool) mod;
-                if (player.hasTool(tool.type())) {
-                    return null;
-                }
-
-                player.addTool(tool);
-                return "Recolheu ferramenta: " + mod.name();
-            }
-        }
 
         return null;
     }
