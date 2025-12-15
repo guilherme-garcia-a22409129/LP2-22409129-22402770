@@ -93,7 +93,7 @@ public class Player {
 
     public String handleModifier(Modifier mod) {
         switch (mod.group()) {
-            case ModifierGroup.ABYSM -> {
+            case ABYSM -> {
                 AbstractAbysm abysm = (AbstractAbysm) mod;
                 AbstractTool tool = abysm.counter(this.tools());
 
@@ -104,7 +104,7 @@ public class Player {
 
                 return this.triggerAbyss(abysm);
             }
-            case ModifierGroup.TOOL -> {
+            case TOOL -> {
                 AbstractTool tool = (AbstractTool) mod;
                 if (this.hasTool(tool.type())) {
                     return null;
