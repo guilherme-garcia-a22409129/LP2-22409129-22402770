@@ -165,6 +165,19 @@ public class GameManager {
             return false;
         }
 
+        // language-based restrictions
+        if (player.languages().contains("Assembly")) {
+            if (spaces > 2) {
+                return false;
+            }
+        }
+
+        if (player.languages().contains("C")) {
+            if (spaces > 3) {
+                return false;
+            }
+        }
+
         if (pos + spaces > board.size()) {
             spaces = board.size() - pos;
         }
