@@ -212,7 +212,7 @@ public class Player {
             String[] langsArr = this.languages.toArray(new String[0]);
             Arrays.sort(langsArr);
 
-            langs = String.join(";", langsArr);
+            langs = String.join("; ", langsArr);
         }
 
         String tools = "No tools";
@@ -223,7 +223,13 @@ public class Player {
             tools = String.join(";", toolsArr);
         }
 
-        return this.id + " | " + this.name + " | " + this.position + " | " + tools + " | " + langs + " | " + (this.state == PlayerState.DEFEATED ? "Derrotado" : "Em Jogo");
+        String state = switch (this.state) {
+            case PLAYING -> "Em Jogo";
+            case TRAPPED -> "Preso";
+            case DEFEATED -> "Derrotado";
+        };
+
+        return this.id + " | " + this.name + " | " + this.position + " | " + tools + " | " + langs + " | " + state;
     }
 
     public String toStringTools() {
