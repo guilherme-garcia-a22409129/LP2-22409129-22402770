@@ -113,7 +113,7 @@ public class GameManager {
                 .map(Player::toStringTools)
                 .toArray(String[]::new);
 
-        return String.join(";", infos);
+        return String.join(" | ", infos);
     }
 
     public String[] getSlotInfo(int slot){
