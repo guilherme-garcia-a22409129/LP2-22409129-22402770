@@ -91,6 +91,7 @@ public class GameManager {
         return board.slotImage(nrSquare);
     }
 
+    // FIX:c pt.ulusofona.lp2.greatprogrammingjourney.TestTeacherP2.test010_BSOD_OBG ?
     public String[] getProgrammerInfo(int id){
         Player jogador = players.get(id);
         if (jogador != null) {

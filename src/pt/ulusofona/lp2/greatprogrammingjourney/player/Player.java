@@ -1,9 +1,7 @@
 package pt.ulusofona.lp2.greatprogrammingjourney.player;
 
-import pt.ulusofona.lp2.greatprogrammingjourney.GameManager;
 import pt.ulusofona.lp2.greatprogrammingjourney.board.Board;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.Modifier;
-import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.ModifierGroup;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.AbstractAbysm;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.AbstractTool;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.ToolType;
@@ -246,13 +244,7 @@ public class Player {
             tools = String.join(";", toolsArr);
         }
 
-        String state = switch (this.state) {
-            case PLAYING -> "Em Jogo";
-            case TRAPPED -> "Preso";
-            case DEFEATED -> "Derrotado";
-        };
-
-        return this.id + " | " + this.name + " | " + this.position + " | " + tools + " | " + langs + " | " + state;
+        return this.id + " | " + this.name + " | " + this.position + " | " + tools + " | " + langs + " | " + this.state.toString();
     }
 
     public String toStringTools() {
@@ -290,7 +282,8 @@ public class Player {
                 langs,
                 this.color,
                 String.valueOf(this.position),
-                tools
+                tools,
+                this.state.toString()
         };
     }
 }
