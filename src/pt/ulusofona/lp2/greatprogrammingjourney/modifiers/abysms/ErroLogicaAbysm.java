@@ -22,7 +22,7 @@ public class ErroLogicaAbysm extends AbstractAbysm {
 
     @Override
     public String name() {
-        return "Erro Lógica";
+        return "Erro de lógica";
     }
 
     @Override

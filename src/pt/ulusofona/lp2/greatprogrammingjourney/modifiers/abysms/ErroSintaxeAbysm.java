@@ -22,7 +22,7 @@ public class ErroSintaxeAbysm extends AbstractAbysm {
 
     @Override
     public String name() {
-        return "Erro Sintaxe";
+        return "Erro de sintaxe";
     }
 
     @Override
