@@ -2,6 +2,7 @@ package pt.ulusofona.lp2.greatprogrammingjourney.modifiers;
 
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.*;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.*;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.TestesUnitariosTool; // this should fix compilation errors, no? :/
 
 public interface Modifier {
     ModifierGroup group();
