@@ -3,8 +3,6 @@ package pt.ulusofona.lp2.greatprogrammingjourney.modifiers;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.*;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.*;
 
-import java.io.File;
-
 public interface Modifier {
     ModifierGroup group();
     String code();

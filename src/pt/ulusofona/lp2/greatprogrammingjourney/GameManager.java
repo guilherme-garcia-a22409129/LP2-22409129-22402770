@@ -169,13 +169,13 @@ public class GameManager implements Serializable {
         }
 
         // language-based restrictions
-        if (player.languages().contains("Assembly")) {
+        if (player.languages().getFirst().equals("Assembly")) {
             if (spaces > 2) {
                 return false;
             }
         }
 
-        if (player.languages().contains("C")) {
+        if (player.languages().getFirst().equals("C")) {
             if (spaces > 3) {
                 return false;
             }

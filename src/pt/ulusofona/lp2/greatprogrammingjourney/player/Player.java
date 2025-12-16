@@ -114,9 +114,10 @@ public class Player {
                 this.addTool(tool);
                 return "Recolheu ferramenta: " + mod.name();
             }
+            default -> {
+                return null;
+            }
         }
-
-        return null;
     }
 
     private String triggerAbyss(AbstractAbysm abysm, Board board, HashMap<Integer, Player> players) {
