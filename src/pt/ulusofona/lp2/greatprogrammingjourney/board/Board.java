@@ -13,7 +13,7 @@ public class Board {
         this.slots = new ArrayList<>(size);
 
         for (int i = 0; i < size; i++) {
-            slots.add(new Slot(i));
+            slots.add(new Slot());
         }
     }
 
@@ -22,17 +22,11 @@ public class Board {
     }
 
     public String slotImage(int slot) {
-        if (slot == 1) {
-            return null;
-            //return "start.png";
-        } else if (slot == this.slots.size()) {
+        if (slot == this.slots.size()) {
             return "glory.png";
-        } else if (slot > 0 && slot < this.slots.size()) {
-            return null;
-            //return "normal.png";
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     public Slot getSlot(int idx) {

@@ -27,7 +27,7 @@ public class ErroLogicaAbysm extends AbstractAbysm {
 
     @Override
     public String message() {
-        return "";
+        return "Erro de lógica aplicado. Recua 3 casas";
     }
 
     @Override

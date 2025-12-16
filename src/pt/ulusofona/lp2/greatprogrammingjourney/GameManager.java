@@ -72,7 +72,6 @@ public class GameManager implements Serializable {
         }
 
         // validar modifiers
-        // FIX: pt.ulusofona.lp2.greatprogrammingjourney.TestTeacherP2.test_027_LanguageBasedMovementRestrictions_OBG
         if (abyssesAndTools != null) {
             for (String[] m : abyssesAndTools) {
                 Modifier mod = Modifier.validate(m, worldSize);

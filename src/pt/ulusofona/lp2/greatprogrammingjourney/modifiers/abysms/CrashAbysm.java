@@ -27,7 +27,7 @@ public class CrashAbysm extends AbstractAbysm {
 
     @Override
     public String message() {
-        return "";
+        return "Crash! Volta à primeira casa";
     }
 
     @Override

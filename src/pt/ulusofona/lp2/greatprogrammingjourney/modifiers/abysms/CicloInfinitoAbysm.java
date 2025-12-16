@@ -27,7 +27,7 @@ public class CicloInfinitoAbysm extends AbstractAbysm {
 
     @Override
     public String message() {
-        return "ahhhhh";
+        return "Ciclo infinito: Fica preso na casa";
     }
 
     @Override

@@ -27,7 +27,7 @@ public class FileNotFoundExceptionAbysm extends AbstractAbysm {
 
     @Override
     public String message() {
-        return "";
+        return "FileNotFoundException: Recua 3 casas";
     }
 
     @Override

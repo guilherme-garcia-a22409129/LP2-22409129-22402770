@@ -27,7 +27,7 @@ public class ExceptionAbysm extends AbstractAbysm {
 
     @Override
     public String message() {
-        return "";
+        return "Exception! Recua 2 casas";
     }
 
     @Override

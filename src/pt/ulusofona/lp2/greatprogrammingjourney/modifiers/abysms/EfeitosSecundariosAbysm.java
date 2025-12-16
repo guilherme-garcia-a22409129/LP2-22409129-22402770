@@ -22,7 +22,7 @@ public class EfeitosSecundariosAbysm extends AbstractAbysm {
 
     @Override
     public String name() {
-        return "Efeitos Secundários";
+        return "Efeitos secundários: Volta à posição de 2 movimentos atrás";
     }
 
     @Override
