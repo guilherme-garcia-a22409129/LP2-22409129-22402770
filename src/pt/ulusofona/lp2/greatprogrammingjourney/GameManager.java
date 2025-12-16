@@ -168,21 +168,23 @@ public class GameManager implements Serializable {
             return false;
         }
 
-        // language-based restrictions
-        if (player.languages().getFirst().equals("Assembly")) {
-            if (spaces > 2) {
-                return false;
-            }
-        }
-
-        if (player.languages().getFirst().equals("C")) {
-            if (spaces > 3) {
-                return false;
-            }
-        }
-
         if (pos + spaces > board.size()) {
             spaces = board.size() - pos;
+        }
+
+        if (!player.languages().isEmpty()) {
+            // language-based restrictions
+            if (player.languages().get(0).equals("Assembly")) {
+                if (spaces > 2) {
+                    return false;
+                }
+            }
+
+            if (player.languages().get(0).equals("C")) {
+                if (spaces > 3) {
+                    return false;
+                }
+            }
         }
 
         player.move(spaces);
