@@ -76,7 +76,15 @@ public interface Modifier {
 
             case "T:0" -> new HerancaTool();
             case "T:1" -> new ProgramacaoFuncionalTool();
-            case "T:2" -> new TestesUnitariosTool();
+            case "T:2" ->  new AbstractTool() {
+                // yup!!! imma do it here... idgaf... dp doesn't see the imported file for some reason...
+                @Override
+                public ToolType type() { return ToolType.TESTES_UNITARIOS; }
+                @Override
+                public String code() { return "T:2"; }
+                @Override
+                public String name() { return "Testes Unitários"; }
+            };
             case "T:3" -> new TratamentoExcepcoesTool();
             case "T:4" -> new IDETool();
             case "T:5" -> new AjudaProfessorTool();
