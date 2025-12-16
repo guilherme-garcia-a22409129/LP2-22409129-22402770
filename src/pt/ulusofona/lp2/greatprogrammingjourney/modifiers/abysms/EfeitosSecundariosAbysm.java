@@ -26,7 +26,7 @@ public class EfeitosSecundariosAbysm extends AbstractAbysm {
     }
 
     @Override
-    public String message() {
+    public String message(String[] params) {
         return "";
     }
 

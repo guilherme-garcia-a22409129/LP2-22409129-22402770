@@ -133,6 +133,8 @@ public class Player {
 
                 this.setPosition(this.position - back);
                 this.history.set(this.history.size()-1, this.position);
+
+                return abysm.message(new String[] { Integer.toString(back) });
             }
             case EXCEPTION -> {
                 this.setPosition(this.position-2);
@@ -186,7 +188,7 @@ public class Player {
             }
         }
 
-        return abysm.message();
+        return abysm.message(null);
     }
 
     public static boolean validate(String[] info, HashMap<Integer, Player> players) {

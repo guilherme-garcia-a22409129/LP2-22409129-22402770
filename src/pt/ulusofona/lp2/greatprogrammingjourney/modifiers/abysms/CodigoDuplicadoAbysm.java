@@ -26,7 +26,7 @@ public class CodigoDuplicadoAbysm extends AbstractAbysm {
     }
 
     @Override
-    public String message() {
+    public String message(String[] params) {
         return "Código duplicado: Volta à posição anterior";
     }
 

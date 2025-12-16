@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public abstract class AbstractAbysm implements Modifier {
     abstract public AbysmType type();
-    abstract public String message();
+    abstract public String message(String[] params);
     abstract public AbstractTool counter(HashMap<ToolType, AbstractTool> tools);
 
     @Override

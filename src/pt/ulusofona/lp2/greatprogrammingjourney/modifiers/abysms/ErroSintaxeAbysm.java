@@ -26,7 +26,7 @@ public class ErroSintaxeAbysm extends AbstractAbysm {
     }
 
     @Override
-    public String message() {
+    public String message(String[] params) {
         return "Caiu num erro de sintaxe! Recua 1 casa";
     }
 

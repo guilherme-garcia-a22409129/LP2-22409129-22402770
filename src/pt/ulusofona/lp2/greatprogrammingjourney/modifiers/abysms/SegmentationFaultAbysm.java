@@ -26,7 +26,7 @@ public class SegmentationFaultAbysm extends AbstractAbysm {
     }
 
     @Override
-    public String message() {
+    public String message(String[] params) {
         return "Segmentation Fault: Todos na casa recuam 3 casas";
     }
 

@@ -26,7 +26,7 @@ public class BlueScreenOfDeathAbysm extends AbstractAbysm {
     }
 
     @Override
-    public String message() {
+    public String message(String[] params) {
         return "Blue Screen of Death: Perde o jogo";
     }
 
