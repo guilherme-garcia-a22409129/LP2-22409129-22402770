@@ -100,7 +100,7 @@ public class TestGameManager {
         assertFalse(gm.moveCurrentPlayer(4)); // should be restricted
     }
 
-    // get react to abyss and tools
+    // react to abyss and tools
     @Test
     public void testReactToAbyssOrToolNoModifier() {
         gm.createInitialBoard(players, 10);
@@ -111,7 +111,13 @@ public class TestGameManager {
     @Test
     public void testGetCurrentPlayerID() {
         gm.createInitialBoard(players, 10);
+
         assertEquals(1, gm.getCurrentPlayerID());
+
+        gm.moveCurrentPlayer(2);
+        gm.reactToAbyssOrTool();
+
+        assertEquals(2, gm.getCurrentPlayerID());
     }
 
     // game is over

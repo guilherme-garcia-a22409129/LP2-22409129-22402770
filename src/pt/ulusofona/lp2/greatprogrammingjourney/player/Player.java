@@ -122,7 +122,6 @@ public class Player {
     private String triggerAbyss(AbstractAbysm abysm, Board board, HashMap<Integer, Player> players) {
         switch (abysm.type()) {
             case ERRO_SINTAXE -> {
-                // update position and log it in history
                 this.setPosition(this.position-1);
                 this.history.set(this.history.size()-1, this.position);
             }
@@ -136,27 +135,22 @@ public class Player {
                 this.history.set(this.history.size()-1, this.position);
             }
             case EXCEPTION -> {
-                // update position and log it in history
                 this.setPosition(this.position-2);
                 this.history.set(this.history.size()-1, this.position);
             }
             case FILE_NOT_FOUND_EXCEPTION -> {
-                // update position and log it in history
                 this.setPosition(this.position-3);
                 this.history.set(this.history.size()-1, this.position);
             }
             case CRASH -> {
-                // update position and log it in history
                 this.setPosition(1);
                 this.history.set(this.history.size()-1, this.position);
             }
             case CODIGO_DUPLICADO -> {
-                // update position and log it in history
                 this.setPosition(this.history.get(this.history.size()-2));
                 this.history.set(this.history.size()-1, this.position);
             }
             case EFEITOS_SECUNDARIOS -> {
-                // update position and log it in history
                 this.setPosition(this.history.get(this.history.size()-3));
                 this.history.set(this.history.size()-1, this.position);
             }
@@ -164,17 +158,16 @@ public class Player {
                 this.setState(PlayerState.DEFEATED);
             }
             case CICLO_INFINITO -> {
-                // todo
-                this.setState(PlayerState.TRAPPED);
-
                 for (Player player : players.values()) {
                     if (player.position() == this.position) {
                         player.setState(PlayerState.PLAYING);
                     }
                 }
+
+                this.setState(PlayerState.TRAPPED);
             }
             case SEGMENTATION_FAULT -> {
-                int count = 1;
+                int count = 0;
                 for (Player player : players.values()) {
                     if (player.position() == this.position) {
                        count++;
