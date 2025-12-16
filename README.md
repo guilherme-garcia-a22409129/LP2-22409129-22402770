@@ -1,6 +1,9 @@
 ## Diagrama
 ![Diagrama UMl](https://raw.githubusercontent.com/guilherme-garcia-a22409129/lp2-projeto1-dev/refs/heads/main/uml.png)
 
+##Video de execução
+https://youtu.be/36yqWhHCN7k
+
 ## Créditos:
 Projeto feito no âmbito da disciplina de 'Linguagens de Programação 2' por:
 - Rodrigo Caetano Filipe (a22402770)
