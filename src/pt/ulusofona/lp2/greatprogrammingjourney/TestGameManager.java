@@ -3,6 +3,9 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestGameManager {
@@ -68,5 +71,40 @@ public class TestGameManager {
         gm.moveCurrentPlayer(4);
 
         assertTrue(gm.gameIsOver(), "O jogo deve acabar quando alguém chega ao fim");
+    }
+
+    // test load / save
+    @Test
+    public void testSave() {
+        String[][] mods = new String[][]{
+            {"1", "4", "33"},
+            {"1", "2", "34"},
+            {"0", "8", "67"},
+            {"1", "5", "3"},
+            {"1", "0", "4"},
+            {"1", "1", "37"}
+        };
+
+        gm.createInitialBoard(players, 100, mods);
+
+        gm.moveCurrentPlayer(4);
+        gm.reactToAbyssOrTool();
+
+        File file = new File("data.txt");
+
+        gm.saveGame(file);
+    }
+
+    @Test
+    public void testLoad() {
+        File file = new File("data.txt");
+
+        try {
+            gm.loadGame(file);
+        } catch (InvalidFileException | FileNotFoundException e) {
+            System.out.println("erro");
+        }
+
+        System.out.println("ahh");
     }
 }

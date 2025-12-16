@@ -1,8 +1,10 @@
 package pt.ulusofona.lp2.greatprogrammingjourney.player;
 
+import pt.ulusofona.lp2.greatprogrammingjourney.InvalidFileException;
 import pt.ulusofona.lp2.greatprogrammingjourney.board.Board;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.Modifier;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.AbstractAbysm;
+import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.AbysmType;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.AbstractTool;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.ToolType;
 
@@ -285,5 +287,77 @@ public class Player {
                 tools,
                 this.state.toString()
         };
+    }
+    public String toSave() {
+        String langs = String.join(";", languages);
+
+        String toolsStr = tools.isEmpty()
+                ? ""
+                : tools.values().stream()
+                    .map(t -> t.type().name())
+                    .sorted()
+                    .reduce((a, b) -> a + "," + b)
+                    .orElse("");
+
+        String historyStr = history.stream()
+                .map(String::valueOf)
+                .reduce((a, b) -> a + "," + b)
+                .orElse("");
+
+        return id + "|" +
+               name + "|" +
+               langs + "|" +
+               color + "|" +
+               position + "|" +
+               state.name() + "|" +
+               toolsStr + "|" +
+               historyStr;
+    }
+    public static Player fromSave(String line) throws InvalidFileException {
+        try {
+            String[] p = line.split("\\|", -1);
+
+            int id = Integer.parseInt(p[0]);
+            String name = p[1];
+            String languages = p[2];
+            String color = p[3];
+            int position = Integer.parseInt(p[4]);
+            PlayerState state = PlayerState.valueOf(p[5]);
+
+            Player player = new Player(new String[]{
+                    String.valueOf(id),
+                    name,
+                    languages,
+                    color
+            });
+
+            player.position = position;
+            player.state = state;
+
+            player.history.clear();
+            if (!p[7].isEmpty()) {
+                for (String h : p[7].split(",")) {
+                    player.history.add(Integer.parseInt(h));
+                }
+            }
+            if (player.history.isEmpty()) {
+                player.history.add(player.position);
+            }
+
+            if (!p[6].isEmpty()) {
+                for (String code : p[6].split(",")) {
+                    AbstractTool tool = (AbstractTool) Modifier.fromCode(code);
+                    if (tool == null) {
+                        throw  new InvalidFileException();
+                    }
+
+                    player.tools.put(tool.type(), tool);
+                }
+            }
+
+            return player;
+        } catch (Exception e) {
+            throw new InvalidFileException();
+        }
     }
 }

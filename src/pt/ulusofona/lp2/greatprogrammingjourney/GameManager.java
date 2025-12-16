@@ -7,13 +7,13 @@ import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
 import pt.ulusofona.lp2.greatprogrammingjourney.player.PlayerState;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 
-public class GameManager {
+public class GameManager implements Serializable {
     private HashMap <Integer, Player> players; // initialize map inside createInitialBoard to avoid persistent data during tests
     private Player winner;
     private Board board;
@@ -254,19 +254,75 @@ public class GameManager {
     }
 
     public void loadGame(File file) throws InvalidFileException, FileNotFoundException {
+        if (file == null || !file.exists()) {
+            throw new FileNotFoundException();
+        }
 
+        players = new HashMap<>();
+        winner = null;
+
+        try (Scanner sc = new Scanner(file)) {
+            while (sc.hasNextLine()) {
+                String line = sc.nextLine();
+
+                if (line.startsWith("BOARD=")) {
+                    board = new Board(Integer.parseInt(line.substring(6)));
+                }
+                else if (line.startsWith("TURNS=")) {
+                    turns = Integer.parseInt(line.substring(6));
+                }
+                else if (line.startsWith("WINNER=")) {
+                    String id = line.substring(7);
+                    if (!id.isEmpty()) {
+                        winner = players.get(Integer.parseInt(id));
+                    }
+                }
+                else if (line.startsWith("SLOT=")) {
+                    board.fromSave(line);
+                }
+                else if (line.startsWith("PLAYER=")) {
+                    Player p = Player.fromSave(line.substring(7));
+                    players.put(p.id(), p);
+                }
+            }
+
+        } catch (InvalidFileException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new InvalidFileException();
+        }
     }
+
 
     public boolean saveGame(File file) {
-        return false;
+        if (file == null) {
+            return false;
+        }
+
+        try (PrintWriter pw = new PrintWriter(file)) {
+            pw.println("BOARD=" + board.size());
+            pw.println("TURNS=" + turns);
+            pw.println("WINNER=" + (winner != null ? winner.id() : ""));
+
+            for (String s : board.toSave()) {
+                pw.println(s);
+            }
+
+            for (Player p : players.values()) {
+                pw.println("PLAYER=" + p.toSave());
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            return false;
+        }
     }
 
-    // TODO...
     public JPanel getAuthorsPanel() {
         return new JPanel();
     }
 
-    // TODO...
     public HashMap<String, String> customizeBoard() {
         return new HashMap<>();
     }

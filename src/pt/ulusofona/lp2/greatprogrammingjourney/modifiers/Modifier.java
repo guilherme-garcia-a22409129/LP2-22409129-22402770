@@ -3,6 +3,8 @@ package pt.ulusofona.lp2.greatprogrammingjourney.modifiers;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.abysms.*;
 import pt.ulusofona.lp2.greatprogrammingjourney.modifiers.tools.*;
 
+import java.io.File;
+
 public interface Modifier {
     ModifierGroup group();
     String code();
@@ -55,6 +57,30 @@ public interface Modifier {
                 case 5 -> new AjudaProfessorTool();
                 default -> null;
             };
+            default -> null;
+        };
+    }
+
+    static Modifier fromCode(String code) {
+        return switch (code) {
+            case "A:0" -> new ErroSintaxeAbysm();
+            case "A:1" -> new ErroLogicaAbysm();
+            case "A:2" -> new ExceptionAbysm();
+            case "A:3" -> new FileNotFoundExceptionAbysm();
+            case "A:4" -> new CrashAbysm();
+            case "A:5" -> new CodigoDuplicadoAbysm();
+            case "A:6" -> new EfeitosSecundariosAbysm();
+            case "A:7" -> new BlueScreenOfDeathAbysm();
+            case "A:8" -> new CicloInfinitoAbysm();
+            case "A:9" -> new SegmentationFaultAbysm();
+
+            case "T:0" -> new HerancaTool();
+            case "T:1" -> new ProgramacaoFuncionalTool();
+            case "T:2" -> new TestesUnitariosTool();
+            case "T:3" -> new TratamentoExcepcoesTool();
+            case "T:4" -> new IDETool();
+            case "T:5" -> new AjudaProfessorTool();
+
             default -> null;
         };
     }
