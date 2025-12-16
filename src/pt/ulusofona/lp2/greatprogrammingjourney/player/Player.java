@@ -108,7 +108,7 @@ public class Player {
             case TOOL -> {
                 AbstractTool tool = (AbstractTool) mod;
                 if (this.hasTool(tool.type())) {
-                    return null;
+                    return "Já possui essa ferramenta. Nada acontece.";
                 }
 
                 this.addTool(tool);

@@ -2,9 +2,13 @@ package pt.ulusofona.lp2.greatprogrammingjourney;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import pt.ulusofona.lp2.greatprogrammingjourney.board.Board;
+import pt.ulusofona.lp2.greatprogrammingjourney.board.Slot;
+import pt.ulusofona.lp2.greatprogrammingjourney.player.Player;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,89 +26,179 @@ public class TestGameManager {
         };
     }
 
-    // test createInitialBoard with valid inputs
+    // create initial board
     @Test
-    public void testCreateInitialBoardValido() {
-        boolean result = gm.createInitialBoard(players, 10);
-        assertTrue(result, "Deve criar o tabuleiro com 2 jogadores e tamanho suficiente");
+    public void testCreateInitialBoardValid() {
+        assertTrue(gm.createInitialBoard(players, 10));
     }
 
-    // test createInitialBoard with invalid color
     @Test
-    public void testCreateInitialBoardCorInvalida() {
-        String[][] jogadoresInvalidos = {
-                {"1", "Han Solo", "Java;Python", "Verde"},  // cor inválida
-                {"2", "Darth Vader", "C++;JavaScript", "Blue"}
+    public void testCreateInitialBoardTooFewPlayers() {
+        String[][] p = {{"1", "Alice", "Java", "Green"}};
+        assertFalse(gm.createInitialBoard(p, 10));
+    }
+
+    @Test
+    public void testCreateInitialBoardTooManyPlayers() {
+        String[][] p = {
+                {"1","A","Java","Green"},
+                {"2","B","C","Blue"},
+                {"3","C","C++","Purple"},
+                {"4","D","Python","Brown"},
+                {"5","E","Java","Green"}
         };
-        boolean result = gm.createInitialBoard(jogadoresInvalidos, 10);
-        assertFalse(result, "Não deve aceitar cores inválidas");
+        assertFalse(gm.createInitialBoard(p, 10));
     }
 
-    // test getCurrentPlayerID
+    @Test
+    public void testCreateInitialBoardInvalidColor() {
+        String[][] p = {{"1","Alice","Java","Pink"}, {"2","Bob","C++","Purple"}};
+        assertFalse(gm.createInitialBoard(p, 10));
+    }
+
+    @Test
+    public void testCreateInitialBoardWorldTooSmall() {
+        assertFalse(gm.createInitialBoard(players, 3));
+    }
+
+    @Test
+    public void testCreateInitialBoardWithModifiers() {
+        String[][] mods = {{"1","4","33"}};
+        assertFalse(gm.createInitialBoard(players, 10, mods));
+        assertTrue(gm.createInitialBoard(players, 50, mods));
+    }
+
+    // move current player
+    @Test
+    public void testMoveCurrentPlayerValid() {
+        gm.createInitialBoard(players, 10);
+        assertTrue(gm.moveCurrentPlayer(3));
+        String[] info = gm.getProgrammerInfo(1);
+        assertEquals("4", info[4]);
+    }
+
+    @Test
+    public void testMoveCurrentPlayerInvalidSpaces() {
+        gm.createInitialBoard(players, 10);
+        assertFalse(gm.moveCurrentPlayer(0));
+        assertFalse(gm.moveCurrentPlayer(7));
+    }
+
+    @Test
+    public void testMoveCurrentPlayerWithAssemblyRestriction() {
+        String[][] p = {{"1","Alice","Assembly","Green"},{"2","Bob","C++","Purple"}};
+        gm.createInitialBoard(p, 10);
+        assertTrue(gm.moveCurrentPlayer(2));
+        assertFalse(gm.moveCurrentPlayer(3)); // should be restricted
+    }
+
+    @Test
+    public void testMoveCurrentPlayerWithCRestriction() {
+        String[][] p = {{"1","Alice","C","Green"},{"2","Bob","C++","Purple"}};
+        gm.createInitialBoard(p, 10);
+        assertTrue(gm.moveCurrentPlayer(3));
+        assertFalse(gm.moveCurrentPlayer(4)); // should be restricted
+    }
+
+    // get react to abyss and tools
+    @Test
+    public void testReactToAbyssOrToolNoModifier() {
+        gm.createInitialBoard(players, 10);
+        assertNull(gm.reactToAbyssOrTool());
+    }
+
+    // get current player id
     @Test
     public void testGetCurrentPlayerID() {
         gm.createInitialBoard(players, 10);
-        int current = gm.getCurrentPlayerID();
-        assertEquals(1, current, "O primeiro jogador deve ter ID 1");
+        assertEquals(1, gm.getCurrentPlayerID());
     }
 
-    // test moveCurrentPlayer
+    // game is over
     @Test
-    public void testMoveCurrentPlayer() {
+    public void testGameIsOverFalse() {
         gm.createInitialBoard(players, 10);
-
-        boolean result = gm.moveCurrentPlayer(3);
-        assertTrue(result, "Mover 3 casas deve ser permitido");
-
-        String[] info = gm.getProgrammerInfo(1);
-        assertEquals("4", info[4], "Após mover 3 casas, o jogador 1 deve estar na casa 4");
-
-        int current = gm.getCurrentPlayerID();
-        assertEquals(2, current, "Depois do Han Solo jogar, deve ser a vez do Darth Vader");
+        assertFalse(gm.gameIsOver());
     }
 
-    // test gameIsOver
     @Test
-    public void testGameIsOver() {
+    public void testGameIsOverTrue() {
         gm.createInitialBoard(players, 4);
-
         gm.moveCurrentPlayer(4);
-
-        assertTrue(gm.gameIsOver(), "O jogo deve acabar quando alguém chega ao fim");
+        assertTrue(gm.gameIsOver());
     }
 
-    // test load / save
+    // valida players
     @Test
-    public void testSave() {
-        String[][] mods = new String[][]{
-            {"1", "4", "33"},
-            {"1", "2", "34"},
-            {"0", "8", "67"},
-            {"1", "5", "3"},
-            {"1", "0", "4"},
-            {"1", "1", "37"}
-        };
-
-        gm.createInitialBoard(players, 100, mods);
-
-        gm.moveCurrentPlayer(4);
-        gm.reactToAbyssOrTool();
-
-        File file = new File("data.txt");
-
-        gm.saveGame(file);
+    public void testPlayerValidateValid() {
+        HashMap<Integer, Player> map = new HashMap<>();
+        assertTrue(Player.validate(new String[]{"1","Alice","Java","Green"}, map));
     }
 
     @Test
-    public void testLoad() {
-        File file = new File("data.txt");
+    public void testPlayerValidateInvalidId() {
+        HashMap<Integer, Player> map = new HashMap<>();
+        assertFalse(Player.validate(new String[]{"0","Alice","Java","Green"}, map));
+    }
 
-        try {
-            gm.loadGame(file);
-        } catch (InvalidFileException | FileNotFoundException e) {
-            System.out.println("erro");
+    @Test
+    public void testPlayerValidateDuplicateId() {
+        HashMap<Integer, Player> map = new HashMap<>();
+        map.put(1, new Player(new String[]{"1","Alice","Java","Green"}));
+        assertFalse(Player.validate(new String[]{"1","Bob","C","Purple"}, map));
+    }
+
+    @Test
+    public void testPlayerValidateEmptyName() {
+        HashMap<Integer, Player> map = new HashMap<>();
+        assertFalse(Player.validate(new String[]{"1","","Java","Green"}, map));
+    }
+
+    @Test
+    public void testPlayerValidateInvalidColor() {
+        HashMap<Integer, Player> map = new HashMap<>();
+        assertFalse(Player.validate(new String[]{"1","Alice","Java","Pink"}, map));
+    }
+
+    // board and slots stuff
+    @Test
+    public void testBoardInitialization() {
+        Board board = new Board(5);
+        assertEquals(5, board.size());
+        for (int i = 1; i <= 5; i++) {
+            assertNotNull(board.getSlot(i));
         }
+    }
 
-        System.out.println("ahh");
+    @Test
+    public void testBoardSlotImage() {
+        Board board = new Board(5);
+        assertNull(board.slotImage(3));
+        assertEquals("glory.png", board.slotImage(5));
+    }
+
+    @Test
+    public void testSlotModifier() {
+        Slot slot = new Slot();
+        assertFalse(slot.hasModifier());
+        slot.setModifier(null);
+        assertFalse(slot.hasModifier());
+    }
+
+    // save and loads stuff
+    @Test
+    public void testSaveAndLoadGame() throws FileNotFoundException, InvalidFileException {
+        gm.createInitialBoard(players, 10);
+        gm.moveCurrentPlayer(3);
+
+        File file = new File("test_game_save.txt");
+        assertTrue(gm.saveGame(file));
+
+        GameManager gm2 = new GameManager();
+        gm2.loadGame(file);
+        assertEquals(1, gm2.getCurrentPlayerID());
+        assertEquals(4, Integer.parseInt(gm2.getProgrammerInfo(1)[4]));
+
+        file.delete();
     }
 }
