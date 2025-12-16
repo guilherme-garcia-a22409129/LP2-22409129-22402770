@@ -27,7 +27,7 @@ public class EfeitosSecundariosAbysm extends AbstractAbysm {
 
     @Override
     public String message(String[] params) {
-        return "";
+        return "Volta à posição de 2 movimentos atrás";
     }
 
     @Override
